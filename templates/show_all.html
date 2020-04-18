@@ -1,0 +1,31 @@
+{% extends 'layout.html'%}
+
+{% block body %}
+
+
+<div id="spacer">
+    <div class="d-flex flex-wrap">
+
+        {% for title,image in movie_dict.items() %}
+        <div id="movie_thumbnail_spacer">
+                <a href="view/{{title}}">
+                <div id="delete_button_spacer">
+                    <button type="button" class="btn btn-outline-danger">X</button>
+                </div>
+                <img src="/static/thumbnails/{{image}}" alt="" width="200" height="150">
+
+                <div id="text_spacer">
+                    <p class="text-info">
+                        {{title}}
+                    </p>
+                </div>
+            </a>
+
+        </div>
+        {% endfor %}
+
+      </div>
+
+
+</div>
+{% endblock %}

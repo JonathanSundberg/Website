@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MyApp!</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/cyborg/bootstrap.min.css">
+    <style type="text/css" rel="stylesheet">
+        #submit_button{
+            margin-left: 30%;
+            margin-top: 10%;
+        }
+        #login_spacer{
+            margin-top: 15%;
+        }
+        #username_input{
+            margin-top: 2%;
+        }
+        #password_input{
+            margin-top: 10%;
+        }
+      </style>
+</head>
+<body>
+    <div id="login_spacer">
+        <div class="d-flex justify-content-center">  
+            <div class="card text-white bg-success mb-3" style="max-width: 20rem;" >
+                <div class="card-body">
+                    <form action="/login" method="POST">
+                        <input type="username" class="form-control" name="username"id="username_input" placeholder="Username">
+                        <input type="password" name="password" class="form-control" id="password_input" placeholder="Password">
+                        <button type="submit" id="submit_button" class="btn btn-primary btn-lg">Log in</button>
+                    </form>
+                </div>
+            </div>
+        </div>  
+    </div>
+
+</body>
+
+

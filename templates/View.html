@@ -1,0 +1,17 @@
+{% extends 'layout.html'%}
+
+{% block body %}
+
+
+
+<div id="video_spacer_vertical">
+    <div id="video_spacer_horizontal">
+        <video width="976" height="512" controls data-setup='{}'>
+            <source src="/static/uploads/{{title}}" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+</div>
+
+
+{% endblock %}
