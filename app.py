@@ -28,6 +28,7 @@ def mkv_to_mp4_convert(og_file_path, filename):
     os.rename(mp4_file_path, mp4_file_path_new)
     return os.path.basename(mp4_file_path_new)
 
+
 def merge_vids_thumbnails(all_movies, all_thumbnails):
     movie_dict = {}
     found=False 
@@ -82,6 +83,15 @@ def delete_existing_thumbnail(file_name):
             os.remove(item)
             return
 
+
+def thumbnail_maker(filename):
+    print("thumbnail maker!")
+    video_input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    img_extension = filename.split(".")[0] + ".png"
+    print("img_extension:", img_extension)
+    img_path = os.path.join(THUMBNAIL_FOLDER, img_extension)
+    subprocess.call(['ffmpeg', '-i', video_input_path, '-ss', '00:00:10.000', '-vframes', '1', img_path])
 
 @app.route('/')
 def index():
@@ -159,44 +169,39 @@ def upload_file():
     if 'file' not in request.files:
         print("No file!")   
         return redirect(url_for('upload_failed', Error_msg="No file in package"))
-    
+
     file = request.files['file']
     # if user does not select file, browser also
     # submit an empty part without filename
     if file.filename == '':
-        print(file.filename)
+        print("file.filename:", file.filename)
         print("No selected file")
         return redirect(url_for('upload_failed', Error_msg="No selected file"))
-    
-    if file and allowed_file(file.filename):
-        print(file.filename)
-        original_filename = file.filename
 
+    if file and allowed_file(file.filename):
+        print("file.filename:", file.filename)
+        original_filename = file.filename
+        no_ext_filename = original_filename.split(".")[0]
+        new_filename = no_ext_filename+".mp4"
         filename_ext = original_filename.split(".")[1]
-        filename = original_filename.split(" ",1)[1]
-        filename = filename.rsplit(" ",1)[0]
-        filename += "." + filename_ext
 
         all_items = collect_all_movies()
         for item in all_items:
-            if item == filename:
+            print(item)
+            if item == new_filename:
                 return redirect(url_for('upload_failed', Error_msg="That file already exists"))
 
         # Check if thumbnail exists but not video and delete it if it do
-        no_ext_filename = original_filename.split(".")[0]
+
         delete_existing_thumbnail(no_ext_filename)
 
         og_file_path = os.path.join(app.config['UPLOAD_FOLDER'], original_filename)
         
         file.save(og_file_path)
-        filename = mkv_to_mp4_convert(og_file_path, filename)
+        filename = mkv_to_mp4_convert(og_file_path, original_filename)
 
-        video_input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-        img_extension = filename.split(".")[0] + ".png"
-        print("img_extension:", img_extension)
-        img_path = os.path.join(THUMBNAIL_FOLDER, img_extension)
-        subprocess.call(['ffmpeg', '-i', video_input_path, '-ss', '00:00:10.000', '-vframes', '1', img_path])
+        thumbnail_maker(new_filename)
 
         return redirect("/upload_success")
     return redirect(url_for('upload_failed', Error_msg="That file extension is not allowed"))
